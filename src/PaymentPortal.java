@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.*;
@@ -66,17 +67,57 @@ public class PaymentPortal extends JFrame {
     }
 
     private class PaymentAction implements ActionListener {
+        private static final String URL = "jdbc:mysql://localhost:3306/gym_ms";
+        private static final String USER = "root";
+        private static final String PASS = "Hero@2002";
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            try (Connection conn = Database.getConnection()) {
-                String sql = "INSERT INTO payments (member_id, amount) VALUES (?, ?)";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setInt(1, Integer.parseInt(memberIdField.getText()));
-                stmt.setDouble(2, Double.parseDouble(amountField.getText()));
-                stmt.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Payment Processed!");
-            } catch (SQLException ex) {
+            String memberIdText = memberIdField.getText().trim();
+            String amountText = amountField.getText().trim();
+
+            // Input validation
+            if (memberIdText.isEmpty() || amountText.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please fill in both fields.");
+                return;
+            }
+
+            try {
+                int memberId = Integer.parseInt(memberIdText); // Validate member ID
+                double amount = Double.parseDouble(amountText); // Validate amount
+
+                if (amount <= 0) {
+                    JOptionPane.showMessageDialog(null, "Amount must be greater than zero.");
+                    return;
+                }
+
+                // Database connection and payment processing
+                try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
+                    String sql = "INSERT INTO payments (member_id, amount) VALUES (?, ?)";
+                    PreparedStatement stmt = conn.prepareStatement(sql);
+                    stmt.setInt(1, memberId);
+                    stmt.setDouble(2, amount);
+                    stmt.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Payment Processed Successfully!");
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Database error: " + ex.getMessage());
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Please enter valid numeric values for Member ID and Amount.");
             }
         }
+    }
+
+    public static void main(String[] args) {
+        // Set look and feel to match native system
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Show payment portal window
+        SwingUtilities.invokeLater(() -> new PaymentPortal().setVisible(true));
     }
 }

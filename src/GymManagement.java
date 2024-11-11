@@ -1,6 +1,5 @@
 import java.awt.*;
 import javax.swing.*;
-
 public class GymManagement extends JFrame {
     public GymManagement() {
         setTitle("Gym Management System");
@@ -8,7 +7,7 @@ public class GymManagement extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        // Set layout and title
+        
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -20,21 +19,21 @@ public class GymManagement extends JFrame {
         gbc.gridwidth = 2;
         add(title, gbc);
 
-        // Buttons with consistent styling
+        
         JButton registerButton = createStyledButton("Register New Member");
         JButton updateButton = createStyledButton("Update Member Details");
         JButton changePlanButton = createStyledButton("Change Membership Plan");
         JButton paymentButton = createStyledButton("Payment Portal");
         JButton recordExerciseButton = createStyledButton("Record Exercise");
 
-        // Button actions
+       
         registerButton.addActionListener(e -> new RegisterMember().setVisible(true));
         updateButton.addActionListener(e -> new UpdateMember().setVisible(true));
         changePlanButton.addActionListener(e -> new ChangePlan().setVisible(true));
         paymentButton.addActionListener(e -> new PaymentPortal().setVisible(true));
         recordExerciseButton.addActionListener(e -> new RecordExercise().setVisible(true));
 
-        // Adding buttons to layout
+        
         gbc.gridwidth = 1;
         gbc.gridy = 1; add(registerButton, gbc);
         gbc.gridy = 2; add(updateButton, gbc);

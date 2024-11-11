@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.*;
@@ -94,9 +95,12 @@ public class UpdateMember extends JFrame {
     }
 
     private class UpdateMemberAction implements ActionListener {
+        private static final String URL = "jdbc:mysql://localhost:3306/gym_ms";
+        private static final String USER = "root";
+        private static final String PASS = "Hero@2002";
         @Override
         public void actionPerformed(ActionEvent e) {
-            try (Connection conn = Database.getConnection()) {
+            try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
                 String sql = "UPDATE members SET name = ?, age = ?, email = ? WHERE id = ?";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setString(1, nameField.getText());

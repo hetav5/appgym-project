@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.*;
@@ -82,18 +83,56 @@ public class RecordExercise extends JFrame {
     }
 
     private class RecordExerciseAction implements ActionListener {
+        private static final String URL = "jdbc:mysql://localhost:3306/gym_ms";
+        private static final String USER = "root";
+        private static final String PASS = "Hero@2002";
+        
         @Override
         public void actionPerformed(ActionEvent e) {
-            try (Connection conn = Database.getConnection()) {
-                String sql = "INSERT INTO exercises (member_id, exercise, duration) VALUES (?, ?, ?)";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setInt(1, Integer.parseInt(memberIdField.getText()));
-                stmt.setString(2, exerciseField.getText());
-                stmt.setInt(3, Integer.parseInt(durationField.getText()));
-                stmt.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Exercise Recorded!");
-            } catch (SQLException ex) {
+            String memberIdText = memberIdField.getText().trim();
+            String exerciseText = exerciseField.getText().trim();
+            String durationText = durationField.getText().trim();
+
+            // Validate inputs
+            if (memberIdText.isEmpty() || exerciseText.isEmpty() || durationText.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "All fields must be filled.");
+                return;
+            }
+
+            try {
+                int memberId = Integer.parseInt(memberIdText);
+                int duration = Integer.parseInt(durationText);
+
+                // Database connection and query execution
+                try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
+                    String sql = "INSERT INTO exercises (member_id, exercise, duration) VALUES (?, ?, ?)";
+                    PreparedStatement stmt = conn.prepareStatement(sql);
+                    stmt.setInt(1, memberId);
+                    stmt.setString(2, exerciseText);
+                    stmt.setInt(3, duration);
+
+                    stmt.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Exercise Recorded!");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Please enter valid numbers for Member ID and Duration.");
             }
         }
+    }
+
+    public static void main(String[] args) {
+        // Set the look and feel to match the system's native look
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Show RecordExercise window
+        SwingUtilities.invokeLater(() -> new RecordExercise().setVisible(true));
     }
 }

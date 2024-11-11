@@ -2,8 +2,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import javax.swing.*;
 
 public class RegisterMember extends JFrame {
@@ -83,18 +83,51 @@ public class RegisterMember extends JFrame {
     }
 
     private class RegisterMemberAction implements ActionListener {
+        private static final String URL = "jdbc:mysql://localhost:3306/gym_ms";
+        private static final String USER = "root";
+        private static final String PASS = "Hero@2002";
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            try (Connection conn = Database.getConnection()) {
-                String sql = "INSERT INTO members (name, age, email) VALUES (?, ?, ?)";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setString(1, nameField.getText());
-                stmt.setInt(2, Integer.parseInt(ageField.getText()));
-                stmt.setString(3, emailField.getText());
-                stmt.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Member Registered!");
-            } catch (SQLException ex) {
+            String name = nameField.getText().trim();
+            String ageText = ageField.getText().trim();
+            String email = emailField.getText().trim();
+
+            if (name.isEmpty() || ageText.isEmpty() || email.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "All fields are required!");
+                return;
+            }
+
+            try {
+                int age = Integer.parseInt(ageText); // Ensure age is a valid integer
+                
+                try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
+                    String sql = "INSERT INTO members (name, age, email) VALUES (?, ?, ?)";
+                    PreparedStatement stmt = conn.prepareStatement(sql);
+                    stmt.setString(1, name);
+                    stmt.setInt(2, age);
+                    stmt.setString(3, email);
+                    stmt.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Member Registered Successfully!");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Database error: " + ex.getMessage());
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Age must be a number!");
             }
         }
+    }
+
+    public static void main(String[] args) {
+        // Set look and feel to match native system
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Show registration window
+        SwingUtilities.invokeLater(() -> new RegisterMember().setVisible(true));
     }
 }
