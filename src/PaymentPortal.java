@@ -72,6 +72,7 @@ public class PaymentPortal extends JFrame {
         private static final String PASS = "Hero@2002";
 
         @Override
+        @SuppressWarnings("CallToPrintStackTrace")
         public void actionPerformed(ActionEvent e) {
             String memberIdText = memberIdField.getText().trim();
             String amountText = amountField.getText().trim();
@@ -109,6 +110,7 @@ public class PaymentPortal extends JFrame {
         }
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "UseSpecificCatch"})
     public static void main(String[] args) {
         // Set look and feel to match native system
         try {

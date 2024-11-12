@@ -19,7 +19,6 @@ public class GymManagement extends JFrame {
         gbc.gridwidth = 2;
         add(title, gbc);
 
-        // Buttons for each action
         JButton registerButton = createStyledButton("Register New Member");
         JButton updateButton = createStyledButton("Update Member Details");
         JButton changePlanButton = createStyledButton("Change Membership Plan");
@@ -27,7 +26,7 @@ public class GymManagement extends JFrame {
         JButton recordExerciseButton = createStyledButton("Record Exercise");
         JButton fetchDataButton = createStyledButton("Fetch Data"); // New Fetch Data button
 
-        // Action listeners for buttons
+        
         registerButton.addActionListener(e -> new RegisterMember().setVisible(true));
         updateButton.addActionListener(e -> new UpdateMember().setVisible(true));
         changePlanButton.addActionListener(e -> new ChangePlan().setVisible(true));
@@ -35,14 +34,14 @@ public class GymManagement extends JFrame {
         recordExerciseButton.addActionListener(e -> new RecordExercise().setVisible(true));
         fetchDataButton.addActionListener(e -> new FetchData().setVisible(true)); // Action for Fetch Data
 
-        // Adding buttons to the layout
+        
         gbc.gridwidth = 1;
         gbc.gridy = 1; add(registerButton, gbc);
         gbc.gridy = 2; add(updateButton, gbc);
         gbc.gridy = 3; add(changePlanButton, gbc);
         gbc.gridy = 4; add(paymentButton, gbc);
         gbc.gridy = 5; add(recordExerciseButton, gbc);
-        gbc.gridy = 6; add(fetchDataButton, gbc); // Adding Fetch Data button to the layout
+        gbc.gridy = 6; add(fetchDataButton, gbc); 
     }
 
     private JButton createStyledButton(String text) {

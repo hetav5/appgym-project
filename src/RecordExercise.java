@@ -88,12 +88,13 @@ public class RecordExercise extends JFrame {
         private static final String PASS = "Hero@2002";
         
         @Override
+        @SuppressWarnings("CallToPrintStackTrace")
         public void actionPerformed(ActionEvent e) {
             String memberIdText = memberIdField.getText().trim();
             String exerciseText = exerciseField.getText().trim();
             String durationText = durationField.getText().trim();
 
-            // Validate inputs
+            
             if (memberIdText.isEmpty() || exerciseText.isEmpty() || durationText.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "All fields must be filled.");
                 return;
@@ -103,7 +104,7 @@ public class RecordExercise extends JFrame {
                 int memberId = Integer.parseInt(memberIdText);
                 int duration = Integer.parseInt(durationText);
 
-                // Database connection and query execution
+                
                 try (Connection conn = DriverManager.getConnection(URL, USER, PASS)) {
                     String sql = "INSERT INTO exercises (member_id, exercise, duration) VALUES (?, ?, ?)";
                     PreparedStatement stmt = conn.prepareStatement(sql);
@@ -124,15 +125,16 @@ public class RecordExercise extends JFrame {
         }
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "UseSpecificCatch"})
     public static void main(String[] args) {
-        // Set the look and feel to match the system's native look
+        
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Show RecordExercise window
+        
         SwingUtilities.invokeLater(() -> new RecordExercise().setVisible(true));
     }
 }

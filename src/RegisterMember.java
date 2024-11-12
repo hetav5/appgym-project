@@ -88,6 +88,7 @@ public class RegisterMember extends JFrame {
         private static final String PASS = "Hero@2002";
 
         @Override
+        @SuppressWarnings("CallToPrintStackTrace")
         public void actionPerformed(ActionEvent e) {
             String name = nameField.getText().trim();
             String ageText = ageField.getText().trim();
@@ -119,15 +120,16 @@ public class RegisterMember extends JFrame {
         }
     }
 
+    @SuppressWarnings({"CallToPrintStackTrace", "UseSpecificCatch"})
     public static void main(String[] args) {
-        // Set look and feel to match native system
+        
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Show registration window
+        
         SwingUtilities.invokeLater(() -> new RegisterMember().setVisible(true));
     }
 }
