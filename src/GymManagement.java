@@ -1,12 +1,12 @@
 import java.awt.*;
 import javax.swing.*;
+
 public class GymManagement extends JFrame {
     public GymManagement() {
         setTitle("Gym Management System");
-        setSize(500, 500);
+        setSize(500, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        
         
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -19,27 +19,30 @@ public class GymManagement extends JFrame {
         gbc.gridwidth = 2;
         add(title, gbc);
 
-        
+        // Buttons for each action
         JButton registerButton = createStyledButton("Register New Member");
         JButton updateButton = createStyledButton("Update Member Details");
         JButton changePlanButton = createStyledButton("Change Membership Plan");
         JButton paymentButton = createStyledButton("Payment Portal");
         JButton recordExerciseButton = createStyledButton("Record Exercise");
+        JButton fetchDataButton = createStyledButton("Fetch Data"); // New Fetch Data button
 
-       
+        // Action listeners for buttons
         registerButton.addActionListener(e -> new RegisterMember().setVisible(true));
         updateButton.addActionListener(e -> new UpdateMember().setVisible(true));
         changePlanButton.addActionListener(e -> new ChangePlan().setVisible(true));
         paymentButton.addActionListener(e -> new PaymentPortal().setVisible(true));
         recordExerciseButton.addActionListener(e -> new RecordExercise().setVisible(true));
+        fetchDataButton.addActionListener(e -> new FetchData().setVisible(true)); // Action for Fetch Data
 
-        
+        // Adding buttons to the layout
         gbc.gridwidth = 1;
         gbc.gridy = 1; add(registerButton, gbc);
         gbc.gridy = 2; add(updateButton, gbc);
         gbc.gridy = 3; add(changePlanButton, gbc);
         gbc.gridy = 4; add(paymentButton, gbc);
         gbc.gridy = 5; add(recordExerciseButton, gbc);
+        gbc.gridy = 6; add(fetchDataButton, gbc); // Adding Fetch Data button to the layout
     }
 
     private JButton createStyledButton(String text) {
